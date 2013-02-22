@@ -7,7 +7,7 @@ function BACKGROUDN(register) {
                         transparent:true,
                         x:0,
                         y:0,
-                        z:-5,
+                        z:-1,
                         size_x:500,
                         size_y:381,
                        });

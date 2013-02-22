@@ -41,9 +41,9 @@ function GRAPHIC(div_name) {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     function get_camera_distance(width, height) {
         var min = 40;
-        var max = 85;
+        var max = 160;
         var length = Math.min(width, height);
-        var distance = length/8;
+        var distance = length/16;
         distance = Math.min(distance, max);
         distance = Math.max(distance, min);
         return distance;

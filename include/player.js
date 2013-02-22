@@ -2,7 +2,7 @@ function PLAYER(register) {
     var self = this;
     var register = register;
     var object;
-    var size_g = 4;
+    var size_g = 2;
     var dx = 0;
     var dy = 0;
     var fric = 0.98;
@@ -47,8 +47,6 @@ function PLAYER(register) {
                                 if (dx < 0)
                                     angle += PI;
                             }
-
-                            console.log(dx);
                             object.set_angle(angle);
                             return {event:self.get_update_event(fn_get_move_keys,
                                                          fn_get_delta_time)};
