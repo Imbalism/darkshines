@@ -7,7 +7,7 @@ function BACKGROUDN(register) {
                         transparent:true,
                         x:0,
                         y:0,
-                        z:-80,
+                        z:-5,
                         size_x:500,
                         size_y:381,
                        });
@@ -16,7 +16,7 @@ function BACKGROUDN(register) {
                         transparent:true,
                         x:0,
                         y:0,
-                        z:-140,
+                        z:-20,
                         size_x:600,
                         size_y:457,
                        });

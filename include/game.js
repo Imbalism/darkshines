@@ -35,7 +35,7 @@ function GAME(div_name){
 
     var load_environment = function() {
         player = new PLAYER(graphic.register);
-        player.create({x:100, y:100});
+        player.create({x:0, y:0});
         bg = new BACKGROUDN(graphic.register);
         bg.create();
 
