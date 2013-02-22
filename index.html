@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+	<head>
+          <title>DarkShines - 0.01</title>
+	  <link href="templates/style.css" rel="stylesheet" type="text/css"/>
+          <script src="include/jquery-1.7.1.min.js"></script>
+          <script src="include/events.js"></script>
+          <script src="include/three_48.js"></script>
+          <script src="include/config.js"></script>
+          <script src="include/runtime.js"></script>
+          <script src="include/texture.js"></script>
+          <script src="include/graphic.js"></script>
+          <script src="include/player.js"></script>
+          <script src="include/background.js"></script>
+          <script src="include/threejsmesh.js"></script>
+          <script src="include/keyboard.js"></script>
+          <script src="include/game.js"></script>
+          <script>
+            var EPS = 0.01;
+            var PI = 3.1415926;
+            $(document).ready(function () {
+                var game = GAME("Game_container");
+                game.init(); });
+            </script>
+	</head>
+	<body>
+          <div id="Game_content">
+            <div id="Game_container"></div>
+	  </div>
+
+	</body>
+</html>
