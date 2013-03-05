@@ -1,9 +1,9 @@
-function BACKGROUDN(register) {
+function BACKGROUDN(create_body) {
     var bg1;
     var bg2;
 
     this.create = function() {
-        bg1 = register({name:"bg1",
+        bg1 = create_body({name:"bg1",
                         transparent:true,
                         x:0,
                         y:0,
@@ -12,7 +12,7 @@ function BACKGROUDN(register) {
                         size_y:381,
                        });
 
-        bg2 = register({name:"bg2",
+        bg2 = create_body({name:"bg2",
                         transparent:true,
                         x:0,
                         y:0,

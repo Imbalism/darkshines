@@ -49,11 +49,17 @@ function GRAPHIC(div_name) {
         return distance;
     }
 
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    this.rerender = function() {
-//        renderer.clear();
-        renderer.render(scene, camera);
+    var objects = new FILTERSET();
+
+    this.register = function(fn_update, fn_validate) {
+        objects.register(fn_update, fn_validate);
     }
+
+    this.update = function() {
+        objects.update();
+        renderer.clear();
+        renderer.render(scene, camera);
+    };
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     this.set_camera = function(pos) {
@@ -61,37 +67,22 @@ function GRAPHIC(div_name) {
         camera.position.y = pos.y;
     };
 
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    this.get_render_event = function() {
-        return new EVENT(false, null,
-                         function(retain){
-                             self.rerender();
-                             return {
-                                 event: self.get_render_event()
-                             };
-                         });
-    };
-
-    this.get_camera_reset_event = function(fn_get_pos) {
-        return new EVENT(false, null,
-                         function(retain){
-                             self.set_camera(fn_get_pos());
-                             return {
-                                 event: self.get_camera_reset_event(fn_get_pos)
-                             };
-                         });
+    this.gen_camera_reset_event = function(fn_get_pos) {
+        return function(){
+            self.set_camera(fn_get_pos());
+        };
     }
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    this.register = function(a) {
+    this.create_body = function(a) {
         var color = (a.color!=undefined)? a.color : 0xffffff;
-        var transparent = (a.transparent!=undefined)? a.transparent : false;
-        var texture = TEXTURE.get_texture(a.name);
+        var opacity = (a.opacity!=undefined)? a.opacity : 1;
+        var transparent = (a.transparent!=undefined)? a.transparent : true;
+        var texture = (a.name!=undefined)? TEXTURE.get_texture(a.name): undefined;
 	material = new THREE.MeshLambertMaterial({
             color:color,
             map:texture,
-            size:1,
-            opacity:1,
+            opacity:opacity,
             transparent:transparent,
             depthTest:false,
             blending: THREE.AdditiveBlending
@@ -104,7 +95,6 @@ function GRAPHIC(div_name) {
 	var y = (a.y!=undefined)? a.y : 0;
 	var z = (a.z!=undefined)? a.z : 0;
 	var angle = (a.angle!=undefined)? a.angle : 0;
-
         var geometry = new THREE.PlaneGeometry(size_x, size_y);
         var mesh = new THREE.Mesh(geometry, material);
 	mesh.position.set(x, y, z);

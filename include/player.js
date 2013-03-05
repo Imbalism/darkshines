@@ -1,59 +1,53 @@
-function PLAYER(register) {
+function PLAYER() {
     var self = this;
-    var register = register;
     var object;
     var size_g = 2;
-    var dx = 0;
-    var dy = 0;
-    var fric = 0.98;
-    var speed = 30;
-    this.create = function(pos) {
-        object = register({name: "player", color:0xffff00,
-                           x:pos.x, y:pos.y,
-                           size:size_g});
+    var mass = 2;
+    var speed = 500;
+    var weapon;
+    var body;
+    this.create = function(start_pos, body_creat, physic_creat, color) {
+        object = body_creat({name: "player", color:color,
+                                   x:start_pos.x, y:start_pos.y,
+                                   size:size_g});
+        body = physic_creat(this, mass, start_pos, CONST.PHYSIC_GROUPS.PLAYER,
+                              CONST.PHYSIC_GROUPS.ALL, 0.6);
     };
 
-    this.get_update_event = function(fn_get_move_keys, fn_get_delta_time) {
-        return new EVENT(false, null,
-                        function(retain){
-                            keys = fn_get_move_keys();
-                            dt = fn_get_delta_time();
-                            pos = self.get_pos();
-                            if (keys.left) dx -= speed * dt;
-                            if (keys.right) dx += speed * dt;
-                            if (keys.up) dy += speed * dt;
-                            if (keys.down) dy -= speed * dt;
-                            dx *= fric;
-                            if (Math.abs(dx - 0) < EPS)
-                                dx = 0;
-                            dy *= fric;
-                            if (Math.abs(dy - 0) < EPS)
-                                dy = 0;
-                            x = pos.x + dx;
-                            y = pos.y + dy;
-                            object.move_to({x:x, y:y});
+    this.graphic_update = function() {
+        object.move_to(body.GetPosition());
+    }
+    this.gen_physic_update = function(fn_get_move_keys) {
+        return function(){
+            var keys = fn_get_move_keys();
+            var force_x = 0;
+            var force_y = 0;
+            if (keys.left) force_x -= speed;
+            if (keys.right) force_x += speed;
+            if (keys.up) force_y += speed;
+            if (keys.down) force_y -= speed;
+            body.ApplyForce(new b2Vec2(force_x, force_y), body.GetPosition());
+            // weapon.update(new_pos);
 
-                            var angle;
-                            if (dx == 0) {
-                                if (dy == 0)
-                                    angle = object.get_angle();
-                                else if (dy > 0)
-                                    angle = 1/2*PI;
-                                else if (dy < 0)
-                                    angle = 3/2*PI;
-                            }
-                            else {
-                                angle = Math.atan(dy / dx);
-                                if (dx < 0)
-                                    angle += PI;
-                            }
-                            object.set_angle(angle);
-                            return {event:self.get_update_event(fn_get_move_keys,
-                                                         fn_get_delta_time)};
-                        });
+            // var angle;
+            // if (dx == 0) {
+            //     if (dy == 0)
+            //         angle = object.get_angle();
+            //     else if (dy > 0)
+            //         angle = 1/2*PI;
+            //     else if (dy < 0)
+            //         angle = 3/2*PI;
+            // }
+            // else {
+            //     angle = Math.atan(dy / dx);
+            //     if (dx < 0)
+            //         angle += PI;
+            // }
+            // object.set_angle(angle);
+        };
     };
 
     this.get_pos = function() {
-        return object.get_pos();
+        return body.GetPosition();
     }
 }

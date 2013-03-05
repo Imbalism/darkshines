@@ -17,4 +17,10 @@ function THREE_JS_MESH(three_js_mesh) {
         return mesh.rotation.z;
     }
 
+    this.set_anchor = function(offset) {
+        var x = (offset.x!=undefined)? offset.x : 0;
+	var y = (offset.y!=undefined)? offset.y : 0;
+        return mesh.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(x,y,0));
+    }
+
 }

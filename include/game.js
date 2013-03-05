@@ -9,6 +9,7 @@ function GAME(div_name){
 
     //init local modules
     var graphic;
+    var physic;
     var player;
     var game_events;
     var render_events;
@@ -16,9 +17,11 @@ function GAME(div_name){
     var keyboard;
 
     this.init = function() {
+        events = new EVENTS(60);
         graphic = new GRAPHIC(canvas_name);
-        render_events = new EVENTS(100/60);
-        game_events = new EVENTS(100/60);
+        physic = new PHYSIC();
+        physic.init();
+
         keyboard = new KEYBOARD();
         keyboard.init();
         //load resources
@@ -34,17 +37,26 @@ function GAME(div_name){
     };
 
     var load_environment = function() {
-        player = new PLAYER(graphic.register);
-        player.create({x:0, y:0});
-        bg = new BACKGROUDN(graphic.register);
+        player = new PLAYER();
+        player.create({x:0, y:0}, graphic.create_body,
+                      physic.create_body, 0xffff00);
+
+        player2 = new PLAYER();
+        player2.create({x:10, y:10}, graphic.create_body,
+                       physic.create_body, 0x00ffff);
+
+        bg = new BACKGROUDN(graphic.create_body);
         bg.create();
 
-        game_events.add_event(player.get_update_event(keyboard.get_move_keys,
-                                                      game_events.get_delta_time));
-        game_events.start();
+        physic.register(player.gen_physic_update(keyboard.get_move_keys));
+        physic.register(player2.gen_physic_update(function(){return {}}));
 
-        render_events.add_event(graphic.get_render_event());
-        render_events.add_event(graphic.get_camera_reset_event(player.get_pos));
-        render_events.start();
+        graphic.register(player.graphic_update);
+        graphic.register(player2.graphic_update);
+
+        events.register(physic.gen_update(events.get_delta_time));
+        events.register(graphic.gen_camera_reset_event(player.get_pos));
+        events.register(graphic.update);
+        events.start();
     };
 }
