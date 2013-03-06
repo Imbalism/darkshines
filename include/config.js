@@ -25,9 +25,11 @@ var CONFIG = new (function() {
     this.TEXTURES_FILES = {
 	"player" : "player.png",
 	"lightsword" : "lightsword.png",
+	"bullet" : "bullet.png",
+	"laser" : "laser.png",
 	"bg1" : "bg_1.png",
 	"bg2" : "bg_2.png",
-    }
+    };
 
     this.REFRESH_RATE = 60;
 });

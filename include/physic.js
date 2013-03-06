@@ -21,22 +21,21 @@ function PHYSIC() {
 
     this.register = function(fn_update, fn_validate) {
         objects.register(fn_update, fn_validate);
-    }
-
-
+    };
 
     this.init = function(){
         world = new Box2D.Dynamics.b2World(
             new Box2D.Common.Math.b2Vec2(0, 0) ,true);
     };
 
-    this.create_body = function(target, mass, start_pos, categoryBits,
+    this.create_body = function(target, mass, is_bullet, start_pos, categoryBits,
                                 maskBits,size,linear_damping) {
         linear_damping = linear_damping||5;
         var body_def = new Box2D.Dynamics.b2BodyDef;
 	body_def.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
 	body_def.position.x = start_pos.x;
 	body_def.position.y = start_pos.y;
+        body_def.bullet = is_bullet;
         var body = world.CreateBody(body_def);
 	body.SetUserData (target);
 	var fix_def = new Box2D.Dynamics.b2FixtureDef;

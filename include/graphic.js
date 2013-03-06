@@ -12,7 +12,7 @@ function GRAPHIC(div_name) {
     var dimension = RUNTIME.get_window_size(div_name);
     var width = dimension.width;
     var height = dimension.height;
-
+    var projector = new THREE.Projector();
     RUNTIME.set_window_size(div_name, width, height);
 
     var ambient = new THREE.AmbientLight( 0x573311);
@@ -38,6 +38,12 @@ function GRAPHIC(div_name) {
     container.appendChild(renderer.domElement);
 
 
+    var intersect_plane = new THREE.Mesh(new THREE.PlaneGeometry(100, 100),
+                                         new THREE.MeshLambertMaterial({
+                                             opacity:0,
+                                             transparent:true}));
+    scene.add(intersect_plane);
+
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     function get_camera_distance(width, height) {
         var min = 40;
@@ -55,6 +61,19 @@ function GRAPHIC(div_name) {
         objects.register(fn_update, fn_validate);
     }
 
+    this.transform_mouse = function(mouse) {
+	var mouseX = (mouse.x / width) * 2 - 1;
+	var mouseY = -(mouse.y / height) * 2 + 1;
+
+	var vector = new THREE.Vector3( mouseX, mouseY, 0.5 );
+        projector.unprojectVector( vector, camera );
+
+	var ray = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize());
+        console.log(intersect_plane.position);
+        var intersects = ray.intersectObjects([intersect_plane]);
+        return intersects[0].point;//projector.unprojectVector(vector, camera);
+    }
+
     this.update = function() {
         objects.update();
         renderer.clear();
@@ -70,6 +89,7 @@ function GRAPHIC(div_name) {
     this.gen_camera_reset_event = function(fn_get_pos) {
         return function(){
             self.set_camera(fn_get_pos());
+            intersect_plane.position.set(camera.position.x, camera.position.y, 0);
         };
     }
 
